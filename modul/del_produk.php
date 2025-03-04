@@ -3,10 +3,10 @@ include '../lib/koneksi.php';
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = "DELETE FROM pelanggan WHERE PelangganID = :PelangganID";
+    $sql = "DELETE FROM produk WHERE ProdukID = :ProdukID";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':PelangganID', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':ProdukID', $id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
        

@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($password == $user['password']) {
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['level'] = $user['level'];
+                $_SESSION['nama'] = $user['nama']; 
 
                 // Redirect sesuai level
                 if ($user['level'] == 'admin') {
@@ -51,55 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        body {
-            background-color: #F0F8FF; /* Soft Blue background */
-            font-family: Arial, sans-serif;
-        }
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            text-align: center;
-            color: #003366; /* Navy color */
-        }
-        .form-label {
-            color: #003366;
-        }
-        .form-control {
-            border-radius: 5px;
-            border: 1px solid #003366;
-        }
-        .btn-custom {
-            color: #fff;
-            background-color: #003366; /* Navy background */
-            border: none;
-            padding: 10px 20px;
-            width: 100%;
-            border-radius: 5px;
-        }
-        .btn-custom:hover {
-            background-color: #002244; /* Darker navy for hover effect */
-        }
-        .alert {
-            margin-top: 15px;
-        }
-        .text-center p {
-            color: #003366;
-        }
-        .text-center a {
-            color: #003366;
-        }
-        .text-center a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    
 </head>
 <body>
 
@@ -113,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         <div class="form-outline mb-4">
             <label class="form-label">Masukkan Password:</label>
-            <input type="password" id="password" class="form-control" name="password" required />
+            <input type="text" id="password" class="form-control" name="password" required />
         </div>
         
         <button type="submit" class="btn btn-custom btn-block mb-4" name="btn">Login</button>
@@ -124,11 +77,85 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         <?php endif; ?>
 
-        <div class="text-center">
-            <p>Belum punya akun? <a href="modul/user.php" class="btn btn-link">Daftar Akun</a></p>
-        </div>
+       
     </form>
 </div>
 
 </body>
 </html>
+<style>
+
+body {
+    background-color: #FAF4EA; /* Beige/Cream */
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: #FAD4D4; /* Soft Pink */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+}
+
+h2 {
+    color: #D76A6A; /* Deep Rose */
+    margin-bottom: 20px;
+}
+
+.form-outline {
+    text-align: left;
+}
+
+.form-label {
+    font-family:  calibri;
+    color: #000000; /* Black */
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #EAEAEA; /* Soft Grey */
+    border-radius: 6px;
+    background-color: #FAF4EA; /* Beige/Cream */
+}
+
+.form-control:focus {
+    border-color: #F6D76F; /* Warm Yellow */
+    outline: none;
+    box-shadow: 0 0 5px rgba(246, 215, 111, 0.5);
+}
+
+.btn-custom {
+    background-color: #D76A6A; /* Deep Rose */
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #C9A86A; /* Gold Accent */
+}
+
+.alert-danger {
+    background-color: #F8B8A0; /* Peachy Pink */
+    color: #000000;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+
+
+</style>

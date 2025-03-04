@@ -22,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             echo "<p class='text-success'>Data pelanggan berhasil ditambahkan!</p>";
+            header("Location: admin_dashboard.php"); // Redirect setelah simpan
+           exit; // Stop eksekusi biar nggak jalan terus
+  
         } catch (PDOException $e) {
             echo "<p class='text-danger'>Terjadi kesalahan: " . $e->getMessage() . "</p>";
         }
@@ -39,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <h2>Input Pelanggan</h2>
-        <form method="POST" action="" id="formPelanggan">
+        <form method="POST" action="cre_pelanggan.php" id="formPelanggan">
             <div>
                 <label for="NamaPelanggan">Nama Pelanggan</label>
                 <input type="text" name="NamaPelanggan" id="NamaPelanggan" required>
