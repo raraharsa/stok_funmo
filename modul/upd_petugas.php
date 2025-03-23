@@ -7,7 +7,7 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     // Ambil data pelanggan berdasarkan ID
-    $sql = "SELECT * FROM produk WHERE ProdukID = :id";
+    $sql = "SELECT * FROM user WHERE UserID = :id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -22,19 +22,19 @@ if (isset($_GET['id'])) {
 
 // Jika form dikirim, update data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['NamaProduk'];
-    $alamat = $_POST['Harga'];
-    $telepon = $_POST['Stok'];
+    $nama = $_POST['nama'];
+    $email = $_POST['email'];
+    
 
-    $sql = "UPDATE produk SET NamaProduk = :nama, Harga = :harga, Stok = :stok WHERE ProdukID = :id";
+    $sql = "UPDATE user SET nama = :nama, email = :email WHERE UserID = :id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':nama', $nama);
-    $stmt->bindParam(':harga', $alamat);
-    $stmt->bindParam(':stok', $telepon);
+    $stmt->bindParam(':email', $email);
+    
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Data Produk berhasil di edit !'); window.location.href='admin_dashboard.php?page=data_produk';</script>";
+        echo "<script>alert('Data berhasil diperbarui!')";
     } else {
         echo "<script>alert('Gagal memperbarui data!');</script>";
     }
@@ -54,14 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container">
     <h2>Edit Produk</h2>
     <form method="POST">
-        <label>Nama Produk:</label>
-        <input type="text" name="NamaProduk" value="<?php echo htmlspecialchars($produk['NamaProduk']); ?>" required>
+        <label>Nama Petugas:</label>
+        <input type="text" name="NamaProduk" value="<?php echo htmlspecialchars($produk['nama']); ?>" required>
 
-        <label>Harga Produk:</label>
-        <input type="text" name="Harga" value="<?php echo htmlspecialchars($produk['Harga']); ?>" required>
+        <label>Email:</label>
+        <input type="text" name="Harga" value="<?php echo htmlspecialchars($produk['email']); ?>" required>
 
-        <label>Stok Produk:</label>
-        <input type="text" name="Stok" value="<?php echo htmlspecialchars($produk['Stok']); ?>" required>
+        
 
         <button type="submit">Simpan Perubahan</button>
     </form>

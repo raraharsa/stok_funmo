@@ -86,8 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <style>
 
 body {
-    background-color: #FAF4EA; /* Beige/Cream */
-    font-family: Arial, sans-serif;
+    background-color: #161a2d; /* Beige/Cream */
+    font-family: 'Poppins', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -96,16 +96,16 @@ body {
 }
 
 .login-container {
-    background-color: #FAD4D4; /* Soft Pink */
+    background-color: white; /* Soft Pink */
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 350px;
+    width: 370px;
     text-align: center;
 }
 
 h2 {
-    color: #D76A6A; /* Deep Rose */
+    color: #161a2d; /* Deep Rose */
     margin-bottom: 20px;
 }
 
@@ -114,8 +114,10 @@ h2 {
 }
 
 .form-label {
-    font-family:  calibri;
+    font-family: 'Poppins', sans-serif;
     color: #000000; /* Black */
+    font-weight: 500;
+    font-size: 12px;
 }
 
 .form-control {
@@ -123,17 +125,17 @@ h2 {
     padding: 10px;
     border: 1px solid #EAEAEA; /* Soft Grey */
     border-radius: 6px;
-    background-color: #FAF4EA; /* Beige/Cream */
+    background-color:rgb(216, 215, 223); /* Beige/Cream */
 }
 
 .form-control:focus {
-    border-color: #F6D76F; /* Warm Yellow */
+    border-color: #161a2d; /* Warm Yellow */
     outline: none;
     box-shadow: 0 0 5px rgba(246, 215, 111, 0.5);
 }
 
 .btn-custom {
-    background-color: #D76A6A; /* Deep Rose */
+    background-color: #161a2d; /* Deep Rose */
     color: white;
     padding: 10px;
     width: 100%;
@@ -145,11 +147,11 @@ h2 {
 }
 
 .btn-custom:hover {
-    background-color: #C9A86A; /* Gold Accent */
+    background-color: #161a2d; /* Gold Accent */
 }
 
 .alert-danger {
-    background-color: #F8B8A0; /* Peachy Pink */
+    background-color:rgb(176, 160, 248); /* Peachy Pink */
     color: #000000;
     padding: 10px;
     border-radius: 6px;

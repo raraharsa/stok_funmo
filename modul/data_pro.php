@@ -3,7 +3,7 @@
 include '../lib/koneksi.php';
 
 // Ambil data siswa
-$sql = "SELECT * FROM pelanggan ORDER BY PelangganID DESC"; // Memastikan data diurutkan dengan benar
+$sql = "SELECT * FROM produk ORDER BY ProdukID DESC"; // Memastikan data diurutkan dengan benar
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabel siswa
@@ -14,34 +14,31 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabe
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Pelanggan</title>
+    <title>Data Produk</title>
     
 </head>
 <body>
 
-<h2>Data Pelanggan</h2>
+<h2>Data Produk</h2>
 
 <table>
     <tr>
         <th>ID</th>
-        <th>Nama</th>
-        <th>Alamat</th>
-        <th>Nomor Telepon</th>
-        <th>Aksi</th>
+        <th>Nama Produk</th>
+        <th>Harga Produk</th>
+        <th>Stok Produk</th>
+        
     </tr>
     <?php
                     $no = 1;
                     foreach ($pel as $row) { ?>
                         <tr>
                             <td><?php echo $no; ?></td>
-                            <td><?php echo $row['NamaPelanggan']; ?></td>
-                            <td><?php echo $row['Alamat']; ?></td>
-                            <td><?php echo $row['NomorTelepon']; ?></td>
+                            <td><?php echo $row['NamaProduk']; ?></td>
+                            <td><?php echo $row['Harga']; ?></td>
+                            <td><?php echo $row['Stok']; ?></td>
 
-                            <td>
-                                <a href="upd_pelanggan.php?id=<?php echo $row['PelangganID']; ?>" class="btn-custom">Edit</a>
-                                <a href="del_pelanggan.php?id=<?php echo $row['PelangganID']; ?>" class="btn-custom">Hapus</a>
-                            </td>
+                            
                         </tr>
                     <?php
                         $no++;
@@ -53,7 +50,7 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabe
 </html>
 
 <style>
-body {
+    body {
     font-family: 'Poppins', sans-serif;
     background-color: #f0f2f5;
     color: #333;
@@ -174,4 +171,5 @@ tr:nth-child(even) td {
 .btn-custom:hover {
     background-color: #37406b;
 }
+
 </style>

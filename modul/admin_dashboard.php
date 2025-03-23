@@ -16,7 +16,7 @@ $nama = $_SESSION['nama'];
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - SMK Bina Citra</title>
+  <title>Dashboard - Admin funmo</title>
   
   <!-- Google Font & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -39,21 +39,22 @@ $nama = $_SESSION['nama'];
       <span>Main Menu</span>
 <div class="menu-separator"></div>
 </h4>
-<li><a href="#" id="InputPelanggan"><span class="material-symbols-outlined">person_add</span>Input Pelanggan</a></li>
-<li><a href="#" id="DataPelanggan"><span class="material-symbols-outlined">dashboard</span>Data Pelanggan</a></li>
-<li><a href="#" id="InputProduk"><span class="material-symbols-outlined">inventory</span>Input Produk</a></li>
-<li><a href="#" id="DataProduk"><span class="material-symbols-outlined">list</span>Data Produk</a></li>
-<li><a href="#" id="InputTransaksi"><span class="material-symbols-outlined">shopping_cart</span>Input Transaksi</a></li>
-<li><a href="#" id="DataTransaksi"><span class="material-symbols-outlined">receipt</span>Data Transaksi</a></li>
-<li><a href="#" id="LaporanPenjualan"><span class="material-symbols-outlined">assessment</span>Laporan Penjualan</a></li>
-<li><a href="#" id="DataPetugas"><span class="material-symbols-outlined">admin_panel_settings</span>Data Petugas</a></li>
+<li><a href="admin_dashboard.php" ><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+<li><a href="?page=pelanggan" ><span class="material-symbols-outlined">person_add</span>Input Pelanggan</a></li>
+<li><a href="?page=data_pelanggan" id="DataPelanggan"><span class="material-symbols-outlined">description</span>Data Pelanggan</a></li>
+<li><a href="?page=produk" id="InputProduk"><span class="material-symbols-outlined">inventory</span>Input Produk</a></li>
+<li><a href="?page=data_produk" id="DataProduk"><span class="material-symbols-outlined">list</span>Data Produk</a></li>
+
+<li><a href="?page=data_transaksi" id="DataTransaksi"><span class="material-symbols-outlined">receipt</span>Data Transaksi</a></li>
+<li><a href="?page=laporan" id="LaporanPenjualan"><span class="material-symbols-outlined">assessment</span>Laporan Penjualan</a></li>
+<li><a href="?page=petugas" id="DataPetugas"><span class="material-symbols-outlined">admin_panel_settings</span>Data Petugas</a></li>
 
 <!-- Account Section -->
 <h4>
 <span>Account</span>
 <div class="menu-separator"></div>
 </h4>
-<li><a href="#" id="LogoutButton"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+<li><a href="?page=logout" id="LogoutButton"><span class="material-symbols-outlined">logout</span>Logout</a></li>
 </ul>
 
 <!-- User Profile Section -->
@@ -70,111 +71,56 @@ $nama = $_SESSION['nama'];
 <!-- Content Area -->
 <div id="contentArea">
 <!-- Konten dinamis akan dimuat di sini -->
-<p class="intro">Selamat datang <?php echo $_SESSION['nama']; ?>. Selamat Bekerja !!</p>
 
-<div id="messageArea"></div>
-</div>
 
-<!-- JavaScript -->
-<script src="script.js"></script>
-</body>
-</html>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  // Ambil elemen yang jadi tempat tampilan konten dinamis
-  const contentArea = document.getElementById("contentArea");
+<?php
+    $page = $_GET['page'];
 
-  // ========================
-  // Fungsi untuk memuat konten secara otomatis tanpa reload
-  // ========================
-  const loadContent = async (url) => {
-    try {
-      // Ambil data dari URL (file PHP)
-      const response = await fetch(url);
-
-      // Cek kalau responsenya gak berhasil (error)
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      // Ubah response menjadi HTML
-      const html = await response.text();
-      contentArea.innerHTML = html; // Tampilkan hasilnya di #contentArea
-      handleFormSubmission(); // Panggil fungsi form biar bisa ditangkap
-    } catch (error) {
-      contentArea.innerHTML = `<p class="text-danger">Gagal memuat konten: ${error.message}</p>`;
+    switch ($page) {
+        case 'pelanggan':
+            include "cre_pelanggan.php";
+            break;
+        case 'produk':
+            include "cre_produk.php";
+            break;
+        case 'data_pelanggan':
+            include "rea_pelanggan.php";
+            break;
+        case 'data_produk':
+            include "rea_produk.php";
+            break;
+        
+        case 'data_transaksi':
+            include "rea_transaksi.php";
+            break;
+        case 'laporan':
+            include "lap_penjualan.php";
+            break;
+        case 'petugas':
+            include "cre_petugas.php";
+            break;
+        case 'logout':
+            echo "<script>
+                    if(confirm('Apakah Anda yakin ingin logout?')) {
+                        window.location.href = 'logout.php';
+                    }
+                  </script>";
+            break;
+        default:
+            include "default.php";
+            break;
     }
-  };
-
-  // =========================
-  // Fungsi untuk menangani submit form
-  // =========================
-  const handleFormSubmission = () => {
-    // Ambil semua form yang ada di halaman dinamis
-    const forms = contentArea.querySelectorAll("form");
-
-    // Looping setiap form biar bisa dikasih event submit
-    forms.forEach((form) => {
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault(); // Stop refresh otomatis
-
-        const formData = new FormData(form); // Ambil data dari input form
-        const actionUrl = form.action; // Ambil URL tujuan dari action di form
-
-        try {
-          // Kirim data ke server pakai metode POST
-          const response = await fetch(actionUrl, {
-            method: "POST",
-            body: formData,
-          });
-
-          const result = await response.text(); // Ambil hasil respon
-          document.getElementById("messageArea").innerHTML = result; // Tampilkan pesan sukses/gagal
-
-          // Auto reload tabel produk
-          if (actionUrl.includes("cre_produk.php")) {
-            loadContent("rea_produk.php");
-          }
-          // Auto reload tabel transaksi
-          else if (actionUrl.includes("cre_pelanggan.php")) {
-            loadContent("rea_pelanggan.php");
-          }
-
-        } catch (error) {
-          // Kalau gagal kirim, kasih pesan error
-          document.getElementById("messageArea").innerHTML = `<p class="text-danger">Gagal mengirim data: ${error.message}</p>`;
-        }
-      });
-    });
-  };
-
-  // =========================
-  // Event Klik Sidebar (Menu Klik Buka Halaman)
-  // =========================
-  document.getElementById("InputPelanggan")?.addEventListener("click", () => loadContent("cre_pelanggan.php"));
-  document.getElementById("DataPelanggan")?.addEventListener("click", () => loadContent("rea_pelanggan.php"));
-  document.getElementById("InputProduk")?.addEventListener("click", () => loadContent("cre_produk.php"));
-  document.getElementById("DataProduk")?.addEventListener("click", () => loadContent("rea_produk.php"));
-  document.getElementById("InputTransaksi")?.addEventListener("click", () => loadContent("modul/transaksi.php"));
-  document.getElementById("DataTransaksi")?.addEventListener("click", () => loadContent("modul/data_transaksi.php"));
-  document.getElementById("LaporanPenjualan")?.addEventListener("click", () => loadContent("modul/laporan.php"));
-  document.getElementById("DataPetugas")?.addEventListener("click", () => loadContent("cre_petugas.php"));
-
-  // =========================
-  // Fungsi Tombol Logout
-  // =========================
-  document.getElementById("LogoutButton")?.addEventListener("click", () => {
-    if (confirm("Apakah Anda yakin ingin logout?")) {
-      window.location.href = "logout.php"; // Arahkan ke halaman logout
-    }
-  });
-});
-</script>
+?>
 
 
 </body>
 </html>
+
+
+
+
+
 <style>
 
  /* Reset */

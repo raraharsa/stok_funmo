@@ -27,7 +27,7 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabe
         <th>Nama</th>
         <th>Alamat</th>
         <th>Nomor Telepon</th>
-        <th>Aksi</th>
+        
     </tr>
     <?php
                     $no = 1;
@@ -38,10 +38,7 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabe
                             <td><?php echo $row['Alamat']; ?></td>
                             <td><?php echo $row['NomorTelepon']; ?></td>
 
-                            <td>
-                                <a href="upd_pelanggan.php?id=<?php echo $row['PelangganID']; ?>" class="btn-custom">Edit</a>
-                                <a href="del_pelanggan.php?id=<?php echo $row['PelangganID']; ?>" class="btn-custom">Hapus</a>
-                            </td>
+                           
                         </tr>
                     <?php
                         $no++;
