@@ -2,11 +2,20 @@
 // koneksi.php berisi kode untuk menghubungkan dengan database
 include '../lib/koneksi.php';
 
-// Ambil data siswa
-$sql = "SELECT * FROM pelanggan ORDER BY PelangganID DESC"; // Memastikan data diurutkan dengan benar
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabel siswa
+// Ambil data pelanggan dengan pencarian
+$search = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $search = trim($_POST['search']);
+    $sql = "SELECT * FROM pelanggan WHERE NamaPelanggan LIKE :search ORDER BY PelangganID DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute(['search' => "%$search%"]);
+} else {
+    $sql = "SELECT * FROM pelanggan ORDER BY PelangganID DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+$pel = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -15,11 +24,16 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabe
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Pelanggan</title>
-    
 </head>
 <body>
 
 <h2>Data Pelanggan</h2>
+
+<!-- Form Pencarian -->
+<form method="POST">
+    <input type="text" name="search" placeholder="Cari pelanggan..." value="<?php echo htmlspecialchars($search); ?>">
+    <button type="submit">Cari</button>
+</form>
 
 <table>
     <tr>
@@ -27,23 +41,24 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabe
         <th>Nama</th>
         <th>Alamat</th>
         <th>Nomor Telepon</th>
-        
     </tr>
     <?php
-                    $no = 1;
-                    foreach ($pel as $row) { ?>
-                        <tr>
-                            <td><?php echo $no; ?></td>
-                            <td><?php echo $row['NamaPelanggan']; ?></td>
-                            <td><?php echo $row['Alamat']; ?></td>
-                            <td><?php echo $row['NomorTelepon']; ?></td>
-
-                           
-                        </tr>
-                    <?php
-                        $no++;
-                    }
-                    ?>
+    if (!empty($pel)) {
+        $no = 1;
+        foreach ($pel as $row) { ?>
+            <tr>
+                <td><?php echo $no; ?></td>
+                <td><?php echo $row['NamaPelanggan']; ?></td>
+                <td><?php echo $row['Alamat']; ?></td>
+                <td><?php echo $row['NomorTelepon']; ?></td>
+            </tr>
+        <?php
+            $no++;
+        }
+    } else {
+        echo "<tr><td colspan='4' style='text-align:center;'>Data tidak ditemukan</td></tr>";
+    }
+    ?>
 </table>
 
 </body>
@@ -66,51 +81,28 @@ h2 {
     margin-bottom: 20px;
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    gap: 20px;
-    max-width: 1200px;
-    margin: auto;
+/* Form Pencarian */
+form {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.form-container {
-    width: 400px;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-label {
-    font-weight: 600;
-    display: block;
-    margin-top: 12px;
-    color: #20263f;
-    font-size: 14px;
-}
-
-input, select {
-    width: 100%;
+input[type="text"] {
     padding: 10px;
-    margin-top: 5px;
+    width: 250px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 14px;
     transition: border 0.3s;
 }
 
-input:focus, select:focus {
+input[type="text"]:focus {
     border-color: #20263f;
     outline: none;
 }
 
 button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 20px;
+    padding: 10px 14px;
     border: none;
     border-radius: 6px;
     background-color: #20263f;
@@ -154,21 +146,5 @@ td {
 
 tr:nth-child(even) td {
     background-color: #eef;
-}
-
-.btn-custom {
-    text-decoration: none;
-    padding: 10px 14px;
-    border-radius: 6px;
-    display: inline-block;
-    margin: 4px;
-    background-color: #20263f;
-    color: white;
-    font-weight: 600;
-    transition: background 0.3s;
-}
-
-.btn-custom:hover {
-    background-color: #37406b;
 }
 </style>

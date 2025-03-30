@@ -36,10 +36,13 @@ $transaksiList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <a href="detail_transaksi.php?id=<?php echo $transaksi['PenjualanID']; ?>">Lihat Detail</a>
                         </td>
                         <td>
-                                <a href="upd_produk.php?id=<?php echo $row['ProdukID']; ?>" class="btn-custom">Edit</a>
-                                <a href="del_transaksi.php?id=<?php echo $row['PenjualanID']; ?>" class="btn-custom">Hapus</a>
+                        
 
-                            </td>
+    <a href="del_transaksi.php?PenjualanID=<?php echo urlencode($transaksi['PenjualanID']); ?>" 
+       class="btn-custom" 
+       onclick="return confirm('Yakin ingin menghapus transaksi ini?');">Hapus</a>
+</td>
+
                     </tr>
                 <?php } ?>
             </tbody>

@@ -37,10 +37,51 @@ $stmt->execute();
 $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabel siswa
 ?>
  -->
+ <img class="gambar" src="../asset/img/funmoo.jpg" alt="">
 
+ <!-- <div class="gambar-container">
+    
+    <p class="intro">Halo, <?php echo $_SESSION['nama']; ?> ..!! <br>
+        Semangat bekerja hari ini. 
+    </p>
+</div> -->
+<style>
 
+.gambar {
+    width: 100%;
+    height: auto;
+    display: block;
+}
 
-  <p class="intro">Selamat datang <?php echo $_SESSION['nama']; ?>. Selamat Bekerja !!</p>
+/* .intro {
+    position: absolute;
+    top: 17%;
+    left: 37%;
+    transform: translate(-50%, -50%);
+    font-size: 40px !important;
+    font-weight: bold;
+    color:  #161a2d;
+    text-align: center;
+    
+    padding: 10px;
+    border-radius: 5px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} */
+
+ </style>
+
 
   <!-- <!DOCTYPE html>
 <html lang="id">

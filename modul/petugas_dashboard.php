@@ -40,9 +40,11 @@ $nama = $_SESSION['nama'];
 <div class="menu-separator"></div>
 </h4>
 <li><a href="?page=default" ><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
-<li><a href="?page=data_pel" id="DataPelanggan"><span class="material-symbols-outlined">description</span>Data Pelanggan</a></li>
-<li><a href="?page=data_pro" id="DataProduk"><span class="material-symbols-outlined">list</span>Data Produk</a></li>
+<li><a href="?page=pelanggan" ><span class="material-symbols-outlined">person_add</span>Input Pelanggan</a></li>
 <li><a href="?page=transaksi" id="InputTransaksi"><span class="material-symbols-outlined">shopping_cart</span>Input Transaksi</a></li>
+<li><a href="?page=data_pel" id="DataPelanggan"><span class="material-symbols-outlined">description</span>Data Pelanggan</a></li>
+<!-- <li><a href="?page=data_pro" id="DataProduk"><span class="material-symbols-outlined">list</span>Data Produk</a></li> -->
+
 <li><a href="?page=data_tran" id="DataTransaksi"><span class="material-symbols-outlined">receipt</span>Data Transaksi</a></li>
 
 
@@ -51,7 +53,7 @@ $nama = $_SESSION['nama'];
 <span>Account</span>
 <div class="menu-separator"></div>
 </h4>
-<li><a href="#" id="LogoutButton"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+<li><a href="?page=logout" ><span class="material-symbols-outlined">logout</span>Logout</a></li>
 </ul>
 
 <!-- User Profile Section -->
@@ -76,6 +78,10 @@ $nama = $_SESSION['nama'];
 
     switch ($page) {
         
+      case 'pelanggan':
+        include "cre_pelanggan.php";
+        break;
+
         case 'data_pel':
             include "data_pel.php";
             break;
@@ -87,7 +93,7 @@ $nama = $_SESSION['nama'];
             break;
             
         case 'data_tran':
-            include "modul/data_tran.php";
+            include "data_trans.php";
             break;
         
         case 'logout':

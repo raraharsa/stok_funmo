@@ -1,41 +1,31 @@
-<?php 
+<?php
 include '../lib/koneksi.php';
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-
+if (isset($_GET['PenjualanID'])) {
+    $penjualanID = $_GET['PenjualanID'];
+    
     try {
-        // Ambil detail transaksi untuk mengembalikan stok produk
-        $sql = "SELECT ProdukID, JumlahProduk FROM detailpenjualan WHERE PenjualanID = :PenjualanID";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':PenjualanID', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $details = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Kembalikan stok produk
-        foreach ($details as $detail) {
-            $sql = "UPDATE produk SET Stok = Stok + :jumlah WHERE ProdukID = :produkID";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':jumlah', $detail['JumlahProduk'], PDO::PARAM_INT);
-            $stmt->bindParam(':produkID', $detail['ProdukID'], PDO::PARAM_INT);
-            $stmt->execute();
-        }
-
-        // Hapus detail transaksi dulu
-        $sql = "DELETE FROM detailpenjualan WHERE PenjualanID = :PenjualanID";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':PenjualanID', $id, PDO::PARAM_INT);
-        $stmt->execute();
-
+        $conn->beginTransaction();
+        
+        // Hapus detail transaksi terlebih dahulu
+        $sqlDetail = "DELETE FROM detailpenjualan WHERE PenjualanID = :penjualanID";
+        $stmtDetail = $conn->prepare($sqlDetail);
+        $stmtDetail->bindParam(':penjualanID', $penjualanID, PDO::PARAM_INT);
+        $stmtDetail->execute();
+        
         // Hapus transaksi utama
-        $sql = "DELETE FROM penjualan WHERE PenjualanID = :PenjualanID";
+        $sql = "DELETE FROM penjualan WHERE PenjualanID = :penjualanID";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':PenjualanID', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':penjualanID', $penjualanID, PDO::PARAM_INT);
         $stmt->execute();
-
-        echo "Transaksi berhasil dihapus!";
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        
+        $conn->commit();
+        echo "<script>alert('Transaksi berhasil dihapus.'); window.location.href='admin_dashboard.php?page=data_transaksi';</script>";
+    } catch (Exception $e) {
+        $conn->rollBack();
+        echo "<script>alert('Gagal menghapus transaksi: " . $e->getMessage() . "'); window.location.href='admin_dashboard.php?page=data_transaksi';</script>";
     }
+} else {
+    echo "<script>alert('ID transaksi tidak ditemukan.'); window.location.href='admin_dashboard.php?page=data_transaksi';</script>";
 }
 ?>

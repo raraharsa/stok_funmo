@@ -40,7 +40,7 @@ $nama = $_SESSION['nama'];
 <div class="menu-separator"></div>
 </h4>
 <li><a href="admin_dashboard.php" ><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
-<li><a href="?page=pelanggan" ><span class="material-symbols-outlined">person_add</span>Input Pelanggan</a></li>
+
 <li><a href="?page=data_pelanggan" id="DataPelanggan"><span class="material-symbols-outlined">description</span>Data Pelanggan</a></li>
 <li><a href="?page=produk" id="InputProduk"><span class="material-symbols-outlined">inventory</span>Input Produk</a></li>
 <li><a href="?page=data_produk" id="DataProduk"><span class="material-symbols-outlined">list</span>Data Produk</a></li>

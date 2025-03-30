@@ -36,9 +36,14 @@ $detailProduk = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <p><strong>ID Transaksi:</strong> <?php echo $transaksi['PenjualanID']; ?></p>
         <p><strong>Tanggal:</strong> <?php echo $transaksi['TanggalPenjualan']; ?></p>
         <p><strong>Pelanggan:</strong> <?php echo $transaksi['NamaPelanggan']; ?></p>
-        <p><strong>Total Harga:</strong> Rp<?php echo number_format($transaksi['TotalHarga'], 0, ',', '.'); ?></p>
 
-        <h3>Produk yang Dibeli</h3>
+        
+
+        <h3 style="display: flex; justify-content: space-between; align-items: center;">
+    Produk yang Dibeli 
+    <span class="beda"><strong>Total Harga:</strong> Rp<?php echo number_format($transaksi['TotalHarga'], 0, ',', '.'); ?></span>
+</h3>
+
         <table>
             <thead>
                 <tr>
@@ -150,4 +155,5 @@ tr:last-child td {
     display: block;
     margin: 10px auto;
 }
+
 </style>

@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             echo "<p class='text-success'>Data pelanggan berhasil ditambahkan!</p>";
-            header("Location: admin_dashboard.php"); // Redirect setelah simpan
+            header("Location: petugas_dashboard.php"); // Redirect setelah simpan
            exit; // Stop eksekusi biar nggak jalan terus
   
         } catch (PDOException $e) {

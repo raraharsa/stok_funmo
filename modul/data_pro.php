@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 // koneksi.php berisi kode untuk menghubungkan dengan database
 include '../lib/koneksi.php';
 
@@ -172,4 +172,4 @@ tr:nth-child(even) td {
     background-color: #37406b;
 }
 
-</style>
+</style> -->

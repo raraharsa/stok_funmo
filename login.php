@@ -57,7 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
 <div class="login-container">
-    <h2>Login</h2>
+    
+    <img class="logo" src="asset/img/logofunmo.png" alt="">
     <form method="POST">
         <div class="form-outline mb-4">
             <label class="form-label">Masukkan Email:</label>
@@ -158,6 +159,10 @@ h2 {
     margin-top: 10px;
 }
 
+.logo{
+    width: 48%;
+    margin-bottom: 30px;
 
+}
 
 </style>

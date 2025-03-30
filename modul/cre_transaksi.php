@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container">
         <h2>Form Transaksi</h2>
         <form method="POST">
-            <label for="PelangganID">Pelanggan:</label>
+            <label style="font-size: 20px;" for="PelangganID">Pelanggan:</label>
             <select name="PelangganID" required>
                 <option value="">-- Pilih Pelanggan --</option>
                 <?php foreach ($pelangganList as $pelanggan) { ?>
@@ -100,13 +100,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php } ?>
             </select>
             
+            
             <h3>Pilih Produk</h3>
             <div id="produk-container">
                 <?php foreach ($produkList as $produk) { ?>
                     <div>
                         <label>
                             <input type="checkbox" name="ProdukID[<?php echo $produk['ProdukID']; ?>]" value="<?php echo $produk['ProdukID']; ?>">
-                            <?php echo $produk['NamaProduk']; ?> - Rp. <?php echo number_format($produk['Harga'], 0, ',', '.'); ?>
+                            <?php echo $produk['NamaProduk']; ?>  <br> 
+                            Rp. <?php echo number_format($produk['Harga'], 0, ',', '.'); ?>
 
 
                         </label>
@@ -145,7 +147,9 @@ h2 {
     text-align: center;
     color: #444;
 }
-
+h3 {
+    margin-top: 20px;
+}
 label {
     font-weight: bold;
     display: block;
@@ -178,17 +182,17 @@ button:hover {
 }
 
 #produk-container {
-    margin-top: 15px;
+    margin-top: 5px;
 }
 
 #produk-container div {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px;
+    padding: 2px;
     background: #f8f8f8;
     border-radius: 5px;
-    margin-top: 5px;
+    margin-top: 2px;
 }
 
 input[type="number"] {

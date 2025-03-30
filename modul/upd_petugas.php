@@ -6,16 +6,16 @@ include '../lib/koneksi.php';
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Ambil data pelanggan berdasarkan ID
+    // Ambil data user berdasarkan ID
     $sql = "SELECT * FROM user WHERE UserID = :id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
-    $produk = $stmt->fetch(PDO::FETCH_ASSOC);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Jika data tidak ditemukan, redirect ke halaman utama
-    if (!$produk) {
-        echo "<script>alert('Produk tidak ditemukan!')";
+    if (!$user) {
+        echo "<script>alert('User tidak ditemukan!'); window.location.href='index.php';</script>";
         exit();
     }
 }
@@ -24,17 +24,15 @@ if (isset($_GET['id'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = $_POST['nama'];
     $email = $_POST['email'];
-    
 
     $sql = "UPDATE user SET nama = :nama, email = :email WHERE UserID = :id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':nama', $nama);
     $stmt->bindParam(':email', $email);
-    
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Data berhasil diperbarui!')";
+        echo "<script>alert('Data berhasil diperbarui!'); window.location.href='admin_dashboard.php?page=petugas';</script>";
     } else {
         echo "<script>alert('Gagal memperbarui data!');</script>";
     }
@@ -46,28 +44,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Produk</title>
-    
+    <title>Edit User</title>
 </head>
 <body>
 
 <div class="container">
-    <h2>Edit Produk</h2>
+    <h2>Edit User</h2>
     <form method="POST">
-        <label>Nama Petugas:</label>
-        <input type="text" name="NamaProduk" value="<?php echo htmlspecialchars($produk['nama']); ?>" required>
+        <label>Nama:</label>
+        <input type="text" name="nama" value="<?php echo htmlspecialchars($user['nama']); ?>" required>
 
         <label>Email:</label>
-        <input type="text" name="Harga" value="<?php echo htmlspecialchars($produk['email']); ?>" required>
-
+        <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
         
-
         <button type="submit">Simpan Perubahan</button>
     </form>
 </div>
 
 </body>
 </html>
+
 <style>
    body {
     font-family: 'Poppins', sans-serif;
@@ -78,7 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 h2 {
-    text-align: center;
     color: #20263f;
     font-size: 24px;
     font-weight: 600;
@@ -133,52 +128,4 @@ button {
 button:hover {
     background-color: #37406b;
 }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background: white;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-}
-
-th {
-    background-color: #20263f;
-    color: white;
-    font-weight: 600;
-}
-
-td {
-    background-color: #f9f9f9;
-}
-
-tr:nth-child(even) td {
-    background-color: #eef;
-}
-
-.btn-custom {
-    text-decoration: none;
-    padding: 10px 14px;
-    border-radius: 6px;
-    display: inline-block;
-    margin: 4px;
-    background-color: #20263f;
-    color: white;
-    font-weight: 600;
-    transition: background 0.3s;
-}
-
-.btn-custom:hover {
-    background-color: #37406b;
-}
-
-
 </style>
