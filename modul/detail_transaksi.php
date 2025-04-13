@@ -20,7 +20,7 @@ if (!$transaksi) {
     die("Transaksi tidak ditemukan.");
 }
 
-// Ambil detail produk dalam transaksi ini
+// Ambil detail produk dalam transaksi 
 $sql = "SELECT dp.JumlahProduk, dp.Subtotal, pr.NamaProduk, pr.Harga
         FROM detailpenjualan dp
         JOIN produk pr ON dp.ProdukID = pr.ProdukID

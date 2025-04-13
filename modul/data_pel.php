@@ -1,5 +1,5 @@
 <?php
-// koneksi.php berisi kode untuk menghubungkan dengan database
+
 include '../lib/koneksi.php';
 
 // Ambil data pelanggan dengan pencarian

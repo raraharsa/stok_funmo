@@ -4,7 +4,7 @@ session_start(); // Mulai sesi
 
 // Periksa apakah pengguna sudah login
 if (!isset($_SESSION['nama'])) {
-    header("Location: login.php"); // Arahkan ke halaman login jika belum login
+    header("Location: login.php"); //  ke halaman login jika belum login
     exit();
 }
 
@@ -123,7 +123,7 @@ $nama = $_SESSION['nama'];
 
 <style>
 
- /* Reset */
+
 * {
   margin: 0;
   padding: 0;
@@ -133,7 +133,7 @@ $nama = $_SESSION['nama'];
 body {
   font-family: "Poppins", sans-serif;
   background: #f0f4ff;
-  margin-left: 260px; /* Sesuaikan dengan lebar sidebar tetap */
+  margin-left: 260px;
 }
 
 .sidebar {
@@ -145,7 +145,7 @@ body {
   background: #161a2d;
   color: #fff;
   padding: 25px 20px;
-  overflow-y: auto; /* Tambahkan scroll */
+  overflow-y: auto; /*  scroll */
 }
 
 /* Custom Scrollbar */
@@ -155,12 +155,12 @@ body {
 
 .sidebar::-webkit-scrollbar-track {
   background: #20263f; /* Warna track scrollbar */
-  border-radius: 4px; /* Sudut membulat */
+  border-radius: 4px; 
 }
 
 .sidebar::-webkit-scrollbar-thumb {
   background: #4f52ba; /* Warna thumb scrollbar */
-  border-radius: 4px; /* Sudut membulat */
+  border-radius: 4px; 
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {

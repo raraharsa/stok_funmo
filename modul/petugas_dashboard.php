@@ -2,7 +2,7 @@
 <?php
 session_start(); // Mulai sesi
 
-// Periksa apakah pengguna sudah login
+//  apakah pengguna sudah login
 if (!isset($_SESSION['nama'])) {
     header("Location: login.php"); // Arahkan ke halaman login jika belum login
     exit();
@@ -43,7 +43,7 @@ $nama = $_SESSION['nama'];
 <li><a href="?page=pelanggan" ><span class="material-symbols-outlined">person_add</span>Input Pelanggan</a></li>
 <li><a href="?page=transaksi" id="InputTransaksi"><span class="material-symbols-outlined">shopping_cart</span>Input Transaksi</a></li>
 <li><a href="?page=data_pel" id="DataPelanggan"><span class="material-symbols-outlined">description</span>Data Pelanggan</a></li>
-<!-- <li><a href="?page=data_pro" id="DataProduk"><span class="material-symbols-outlined">list</span>Data Produk</a></li> -->
+
 
 <li><a href="?page=data_tran" id="DataTransaksi"><span class="material-symbols-outlined">receipt</span>Data Transaksi</a></li>
 
@@ -119,7 +119,7 @@ $nama = $_SESSION['nama'];
 
 <style>
 
- /* Reset */
+ 
 * {
   margin: 0;
   padding: 0;
@@ -129,7 +129,7 @@ $nama = $_SESSION['nama'];
 body {
   font-family: "Poppins", sans-serif;
   background: #f0f4ff;
-  margin-left: 260px; /* Sesuaikan dengan lebar sidebar tetap */
+  margin-left: 260px; 
 }
 
 .sidebar {

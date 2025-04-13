@@ -1,5 +1,5 @@
 <?php
-// Sertakan file koneksi database
+
 include '../lib/koneksi.php';
 
 // Periksa apakah ada ID yang dikirim melalui URL
