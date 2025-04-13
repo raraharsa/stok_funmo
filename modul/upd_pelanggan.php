@@ -41,35 +41,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+
+
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Pelanggan</title>
-    
-</head>
-<body>
-
-<div class="container">
-    <h2>Edit Pelanggan</h2>
-    <form method="POST">
-        <label>Nama Pelanggan:</label>
-        <input type="text" name="NamaPelanggan" value="<?php echo htmlspecialchars($pelanggan['NamaPelanggan']); ?>" required>
-
-        <label>Alamat:</label>
-        <input type="text" name="Alamat" value="<?php echo htmlspecialchars($pelanggan['Alamat']); ?>" required>
-
-        <label>Nomor Telepon:</label>
-        <input type="text" name="NomorTelepon" value="<?php echo htmlspecialchars($pelanggan['NomorTelepon']); ?>" required>
-
-        <button type="submit">Simpan Perubahan</button>
-    </form>
-</div>
-
-</body>
-</html>
-<style>
+    <title>Document</title>
+    <style>
    body {
     font-family: 'Poppins', sans-serif;
     background-color: #f0f2f5;
@@ -93,6 +73,7 @@ h2 {
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+    padding-right: 45px;
 }
 
 label {
@@ -100,6 +81,7 @@ label {
     display: block;
     margin-top: 12px;
     color: #20263f;
+
 }
 
 input {
@@ -110,11 +92,14 @@ input {
     border-radius: 6px;
     font-size: 14px;
     transition: border 0.3s;
+    
+    
 }
 
 input:focus {
     border-color: #20263f;
     outline: none;
+    
 }
 
 button {
@@ -183,3 +168,22 @@ tr:nth-child(even) td {
 
 
 </style>
+</head>
+<body>
+<div class="container">
+    <h2>Edit Pelanggan</h2>
+    <form method="POST">
+        <label>Nama Pelanggan:</label>
+        <input type="text" name="NamaPelanggan" value="<?php echo htmlspecialchars($pelanggan['NamaPelanggan']); ?>" required>
+
+        <label>Alamat:</label>
+        <input type="text" name="Alamat" value="<?php echo htmlspecialchars($pelanggan['Alamat']); ?>" required>
+
+        <label>Nomor Telepon:</label>
+        <input type="text" name="NomorTelepon" value="<?php echo htmlspecialchars($pelanggan['NomorTelepon']); ?>" required>
+
+        <button type="submit">Simpan Perubahan</button>
+    </form>
+</div> 
+</body>
+</html>

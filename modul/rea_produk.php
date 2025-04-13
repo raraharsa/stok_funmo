@@ -35,8 +35,16 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabe
                         <tr>
                             <td><?php echo $no; ?></td>
                             <td><?php echo $row['NamaProduk']; ?></td>
-                            <td><?php echo $row['Harga']; ?></td>
-                            <td><?php echo $row['Stok']; ?></td>
+                            <td>Rp<?php echo number_format($row['Harga'], 0, ',', '.'); ?></td>
+
+                            <td>
+    <?php if ($row['Stok'] <= 5): ?>
+        <span style="color: red; font-weight: bold;"><?php echo $row['Stok']; ?> (Stok Menipis)</span>
+    <?php else: ?>
+        <?php echo $row['Stok']; ?>
+    <?php endif; ?>
+</td>
+
 
                             <td>
                                 <a href="upd_produk.php?id=<?php echo $row['ProdukID']; ?>" class="btn-custom">Edit</a>

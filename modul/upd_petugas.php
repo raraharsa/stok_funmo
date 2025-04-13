@@ -1,5 +1,5 @@
 <?php
-// Sertakan file koneksi database
+
 include '../lib/koneksi.php';
 
 // Periksa apakah ada ID yang dikirim melalui URL
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User</title>
+    <title>Edit Petugas</title>
 </head>
 <body>
 
@@ -87,6 +87,7 @@ h2 {
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+    padding-right:45px;
 }
 
 label {

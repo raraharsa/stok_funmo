@@ -14,6 +14,7 @@ $transaksiList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <div class="container">
         <h2>Daftar Transaksi</h2>
+       
         <table>
             <thead>
                 <tr>
@@ -57,7 +58,7 @@ $transaksiList = $stmt->fetchAll(PDO::FETCH_ASSOC);
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: 100%;
         margin: 0;
         color: #333;
     }
@@ -67,7 +68,7 @@ $transaksiList = $stmt->fetchAll(PDO::FETCH_ASSOC);
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 900px;
+        width: 1000px;
     }
 
     h2 {

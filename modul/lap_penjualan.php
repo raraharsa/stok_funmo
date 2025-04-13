@@ -109,12 +109,15 @@ $laporan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <div class="container">
         <h2>Laporan Penjualan</h2>
+        
+
         <table>
             <thead>
                 <tr>
                     <th>Tanggal</th>
                     <th>Jumlah Transaksi</th>
                     <th>Total Penjualan</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -124,6 +127,7 @@ $laporan = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?php echo $data['TanggalPenjualan']; ?></td>
                             <td><?php echo $data['JumlahTransaksi']; ?></td>
                             <td>Rp<?php echo number_format($data['TotalPenjualan'], 0, ',', '.'); ?></td>
+                            
                         </tr>
                     <?php }
                 } else { ?>

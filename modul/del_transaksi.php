@@ -7,7 +7,7 @@ if (isset($_GET['PenjualanID'])) {
     try {
         $conn->beginTransaction();
         
-        // Hapus detail transaksi terlebih dahulu
+        // Hapus detail transaksi 
         $sqlDetail = "DELETE FROM detailpenjualan WHERE PenjualanID = :penjualanID";
         $stmtDetail = $conn->prepare($sqlDetail);
         $stmtDetail->bindParam(':penjualanID', $penjualanID, PDO::PARAM_INT);
