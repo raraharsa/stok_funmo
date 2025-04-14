@@ -7,6 +7,21 @@ $sql = "SELECT * FROM pelanggan ORDER BY PelangganID DESC"; // Memastikan data d
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabel siswa
+
+// Ambil data pelanggan dengan pencarian
+$search = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $search = trim($_POST['search']);
+    $sql = "SELECT * FROM pelanggan WHERE NamaPelanggan LIKE :search ORDER BY PelangganID DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute(['search' => "%$search%"]);
+} else {
+    $sql = "SELECT * FROM pelanggan ORDER BY PelangganID DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+$pel = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +35,14 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabe
 <body>
 
 <h2>Data Pelanggan</h2>
+<!-- Form Pencarian -->
+ <center>
+ <form method="POST" style=" width: 30%;">
+    <input type="text" name="search" placeholder="Cari pelanggan..." value="<?php echo htmlspecialchars($search); ?>">
+    <button type="submit">Cari</button>
+</form>
+ </center>
+
 
 <table>
     <tr>

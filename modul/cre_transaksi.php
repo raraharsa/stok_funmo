@@ -1,6 +1,6 @@
 <?php
 include '../lib/koneksi.php';
-date_default_timezone_set('Asia/Jakarta'); // Sesuaikan dengan zona waktu yang kamu pakai
+date_default_timezone_set('Asia/Jakarta'); 
 
 // Ambil daftar produk dari database
 $sql = "SELECT * FROM produk ORDER BY NamaProduk ASC";

@@ -109,7 +109,8 @@ $laporan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <div class="container">
         <h2>Laporan Penjualan</h2>
-        
+        <a href="export_excel.php" class="btn-custom">Export ke Excel</a>
+
 
         <table>
             <thead>

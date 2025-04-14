@@ -24,11 +24,13 @@ if (isset($_GET['id'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = $_POST['nama'];
     $email = $_POST['email'];
+    $password = $_POST['password'];
 
-    $sql = "UPDATE user SET nama = :nama, email = :email WHERE UserID = :id";
+    $sql = "UPDATE user SET nama = :nama, email = :email, password = :password WHERE UserID = :id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':nama', $nama);
     $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':password', $password);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
@@ -56,6 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <label>Email:</label>
         <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+        
+        <label>Password:</label>
+        <input type="text" name="password" value="<?php echo htmlspecialchars($user['password']); ?>" required>
+
         
         <button type="submit">Simpan Perubahan</button>
     </form>

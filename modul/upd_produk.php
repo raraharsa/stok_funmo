@@ -93,6 +93,7 @@ h2 {
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+    padding-right: 45px;
 }
 
 label {
