@@ -41,7 +41,7 @@ $detailProduk = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <h3 style="display: flex; justify-content: space-between; align-items: center;">
     Produk yang Dibeli 
-    <span class="beda"><strong>Total Harga:</strong> Rp<?php echo number_format($transaksi['TotalHarga'], 0, ',', '.'); ?></span>
+    
 </h3>
 
         <table>
@@ -61,11 +61,13 @@ $detailProduk = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo $produk['JumlahProduk']; ?></td>
                         <td>Rp<?php echo number_format($produk['Subtotal'], 0, ',', '.'); ?></td>
                     </tr>
+                    
                 <?php } ?>
+                
             </tbody>
         </table>
 
-        
+        <p class="beda"><strong>Total Harga:</strong> Rp<?php echo number_format($transaksi['TotalHarga'], 0, ',', '.'); ?></p>
     </div>
 </body>
 
@@ -154,6 +156,10 @@ tr:last-child td {
     width: 140px;
     display: block;
     margin: 10px auto;
+}
+.beda {
+    text-align: right;
+    margin-top: 50px;
 }
 
 </style>

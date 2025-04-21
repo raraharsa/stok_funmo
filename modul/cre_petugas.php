@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':level', $level);
 
         if ($stmt->execute()) {
-            echo "<script>alert('Data Petugas berhasil di tambahkan !'); window.location.href='admin_dashboard.php?page=petugas';</script>";
+            echo "<script>alert('Data  berhasil di tambahkan !'); window.location.href='admin_dashboard.php?page=petugas';</script>";
             // header("Location: admin_dashboard.php"); // Redirect setelah simpan
            exit; // Stop eksekusi biar nggak jalan terus
         } else {
@@ -67,7 +67,7 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC); // Menyimpan hasil query dalam variabe
             <label for="level" >Level</label>
             <select  name="level" required>
                 <option value="petugas">Petugas</option>
-                
+                <option value="Admin">Admin</option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Tambah</button>

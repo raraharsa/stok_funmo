@@ -3,8 +3,8 @@
 session_start(); // Mulai sesi
 
 // Periksa apakah pengguna sudah login
-if (!isset($_SESSION['nama'])) {
-    header("Location: login.php"); //  ke halaman login jika belum login
+if (empty($_SESSION['nama'])) {
+    header("Location: ../login.php"); //  ke halaman login jika belum login
     exit();
 }
 
@@ -54,7 +54,7 @@ $nama = $_SESSION['nama'];
 <span>Account</span>
 <div class="menu-separator"></div>
 </h4>
-<li><a href="?page=logout" id="LogoutButton"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+<li><a href="logout.php" id="LogoutButton"><span class="material-symbols-outlined">logout</span>Logout</a></li>
 </ul>
 
 <!-- User Profile Section -->

@@ -3,8 +3,8 @@
 session_start(); // Mulai sesi
 
 //  apakah pengguna sudah login
-if (!isset($_SESSION['nama'])) {
-    header("Location: login.php"); // Arahkan ke halaman login jika belum login
+if (empty($_SESSION['nama'])) {
+    header("Location: ../login.php"); // Arahkan ke halaman login jika belum login
     exit();
 }
 

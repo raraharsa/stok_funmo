@@ -1,8 +1,7 @@
 <?php 
 session_start();
-if (isset($_SESSION['UserID'])) { // Cek apakah iduser ada di sesi
-    session_destroy(); // Hapus sesi
-}
-header('Location: ../login.php'); // Arahkan kembali ke halaman login setelah logout
-exit();
+session_unset();
+session_destroy();
+echo '<script type="text/javascript">setTimeout(function() { window.location.href = "../login.php"; });</script>';
+
 ?>

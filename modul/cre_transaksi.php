@@ -93,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label style="font-size: 20px;" for="PelangganID">Pelanggan:</label>
             <select name="PelangganID" required>
                 <option value="">-- Pilih Pelanggan --</option>
+                
                 <?php foreach ($pelangganList as $pelanggan) { ?>
                     <option value="<?php echo $pelanggan['PelangganID']; ?>">
                         <?php echo $pelanggan['NamaPelanggan']; ?>

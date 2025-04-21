@@ -14,7 +14,7 @@ $transaksiList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <div class="container">
         <h2>Daftar Transaksi</h2>
-       
+        <a href="export_excel2.php" class="btn-custom">Export ke Excel</a>
         <table>
             <thead>
                 <tr>
