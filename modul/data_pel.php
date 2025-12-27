@@ -39,6 +39,7 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <tr>
         <th>ID</th>
         <th>Nama</th>
+        <th>Customer Class</th>
         <th>Alamat</th>
         <th>Nomor Telepon</th>
     </tr>
@@ -49,6 +50,7 @@ $pel = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <td><?php echo $no; ?></td>
                 <td><?php echo $row['NamaPelanggan']; ?></td>
+                <td><?php echo $row['cust_class_code']; ?></td>
                 <td><?php echo $row['Alamat']; ?></td>
                 <td><?php echo $row['NomorTelepon']; ?></td>
             </tr>

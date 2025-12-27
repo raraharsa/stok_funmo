@@ -1,168 +1,217 @@
 <?php
 session_start();
-include 'lib/koneksi.php'; // Koneksi database dengan PDO
+include 'lib/koneksi.php';
+
+$email_error = $password_error = "";
+$email = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+    $valid = true;
 
-    try {
-        // Query untuk mencari user berdasarkan email
-        $query = "SELECT * FROM user WHERE email = :email";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    if (empty($email)) {
+        $email_error = "Email wajib diisi";
+        $valid = false;
+    }
+
+    if (empty($password)) {
+        $password_error = "Password wajib diisi";
+        $valid = false;
+    }
+
+    if ($valid) {
+        $stmt = $conn->prepare("SELECT * FROM user WHERE email = :email");
+        $stmt->bindParam(':email', $email);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Cek apakah user ditemukan
-        if ($user) {
-            // Bandingkan password biasa (plaintext)
-            if ($password == $user['password']) {
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['level'] = $user['level'];
-                $_SESSION['nama'] = $user['nama']; 
-
-                // Redirect sesuai level
-                if ($user['level'] == 'admin') {
-                    header("Location: modul/admin_dashboard.php");
-                } elseif ($user['level'] == 'petugas') {
-                    header("Location: modul/petugas_dashboard.php");
-                } else {
-                    header("Location: index.php");
-                }
-                exit();
-            } else {
-                echo "<div style='color: red;'>Password salah.</div>";
-            }
+        if ($user && $password == $user['password']) {
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['level'] = $user['level'];
+            $_SESSION['nama']  = $user['nama'];
+            header("Location: modul/{$user['level']}_dashboard.php");
+            exit();
         } else {
-            echo "<div style='color: red;'>Email tidak ditemukan.</div>";
+            $email_error = "Email / Password salah";
         }
-    } catch (PDOException $e) {
-        echo "<div style='color: red;'>Error: " . $e->getMessage() . "</div>";
-    }  
+    }
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
-</head>
-<body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
 
-<div class="login-container">
-    
-    <img class="logo" src="asset/img/logofunmo.png" alt="">
-    <form method="POST">
-        <div class="form-outline mb-4">
-            <label class="form-label">Masukkan Email:</label>
-            <input type="email"  id="email" class="form-control" name="email" required />
-        </div>
-        
-        <div class="form-outline mb-4">
-            <label class="form-label">Masukkan Password:</label>
-            <input type="text" id="password" class="form-control" name="password" required />
-        </div>
-        
-        <button type="submit" class="btn btn-custom btn-block mb-4" name="btn">Login</button>
-        
-        <?php if (isset($error_message)): ?>
-            <div class="alert alert-danger" role="alert">
-                <?php echo $error_message; ?>
-            </div>
-        <?php endif; ?>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-       
-    </form>
-</div>
-
-</body>
-</html>
 <style>
-
-body {
-    background-color: #161a2d; /* Beige/Cream */
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+body{
+    font-family:'Poppins',sans-serif;
+    background:#00AEEF;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-.login-container {
-    background-color: white; /* Soft Pink */
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 370px;
-    text-align: center;
-}
 
-h2 {
-    color: #161a2d; /* Deep Rose */
-    margin-bottom: 20px;
-}
-
-.form-outline {
-    text-align: left;
-}
-
-.form-label {
-    font-family: 'Poppins', sans-serif;
-    color: #000000; /* Black */
-    font-weight: 500;
-    font-size: 12px;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #EAEAEA; /* Soft Grey */
-    border-radius: 6px;
-    background-color:rgb(216, 215, 223); /* Beige/Cream */
-}
-
-.form-control:focus {
-    border-color: #161a2d; /* Warm Yellow */
-    outline: none;
-    box-shadow: 0 0 5px rgba(246, 215, 111, 0.5);
-}
-
-.btn-custom {
-    background-color: #161a2d; /* Deep Rose */
-    color: white;
-    padding: 10px;
-    width: 100%;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-custom:hover {
-    background-color: #161a2d; /* Gold Accent */
-}
-
-.alert-danger {
-    background-color:rgb(176, 160, 248); /* Peachy Pink */
-    color: #000000;
-    padding: 10px;
-    border-radius: 6px;
-    margin-top: 10px;
+.login-box{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    padding:42px 38px;
+    border-radius:14px;
+    box-shadow:0 18px 40px rgba(0,0,0,.1);
 }
 
 .logo{
-    width: 48%;
-    margin-bottom: 30px;
-
+    width:110px;
+    display:block;
+    margin:0 auto 16px;
 }
 
+.title{
+    text-align:center;
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.subtitle{
+    text-align:center;
+    font-size:13px;
+    color:#777;
+    margin-bottom:28px;
+}
+
+/* INPUT */
+.form-group{
+    position:relative;
+    margin-bottom:22px;
+}
+
+.form-group i.icon-left{
+    position:absolute;
+    top:50%;
+    left:14px;
+    transform:translateY(-50%);
+    color:#aaa;
+    font-size:14px;
+}
+
+.form-group input{
+    width:100%;
+    padding:12px 44px 12px 40px; /* kanan dikasih ruang buat mata */
+    border-radius:10px;
+    border:1px solid #ddd;
+    font-size:14px;
+    transition:.2s;
+}
+
+.form-group input:focus{
+    border-color:#00AEEF;
+    box-shadow:0 0 0 3px rgba(0,174,239,.15);
+    outline:none;
+}
+
+/* EYE */
+.toggle-password{
+    position:absolute;
+    top:50%;
+    right:14px;
+    transform:translateY(-50%);
+    cursor:pointer;
+    color:#999;
+    font-size:14px;
+}
+
+.toggle-password:hover{
+    color:#00AEEF;
+}
+
+.error{
+    font-size:12px;
+    color:#e74c3c;
+    margin-top:4px;
+}
+
+/* BUTTON */
+.btn-login{
+    width:100%;
+    background:#00AEEF;
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    padding:12px;
+    font-weight:500;
+    transition:.3s;
+}
+
+.btn-login:hover{
+    background:#0095cc;
+}
+
+.btn-login.loading{
+    pointer-events:none;
+    opacity:.85;
+}
 </style>
+</head>
+
+<body>
+
+<div class="login-box">
+    <img src="asset/img/SMS logo.png" class="logo">
+
+    <div class="title">Login Akun</div>
+    <div class="subtitle">Silakan masuk untuk melanjutkan</div>
+
+    <form method="POST" onsubmit="loadingBtn()">
+        <div class="form-group">
+            <i class="fa fa-envelope icon-left"></i>
+            <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($email) ?>">
+            <?php if($email_error): ?><div class="error"><?= $email_error ?></div><?php endif; ?>
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-lock icon-left"></i>
+            <input type="password" name="password" id="password" placeholder="Password">
+            <span class="toggle-password" onclick="togglePassword()">
+                <i class="fa fa-eye"></i>
+            </span>
+            <?php if($password_error): ?><div class="error"><?= $password_error ?></div><?php endif; ?>
+        </div>
+
+        <button class="btn-login" id="btnLogin">
+            Login
+        </button>
+    </form>
+</div>
+
+<script>
+function togglePassword(){
+    const pass = document.getElementById('password');
+    const icon = document.querySelector('.toggle-password i');
+
+    if(pass.type === 'password'){
+        pass.type = 'text';
+        icon.classList.replace('fa-eye','fa-eye-slash');
+    }else{
+        pass.type = 'password';
+        icon.classList.replace('fa-eye-slash','fa-eye');
+    }
+}
+
+function loadingBtn(){
+    const btn = document.getElementById('btnLogin');
+    btn.classList.add('loading');
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Memproses...';
+}
+</script>
+
+</body>
+</html>

@@ -2,145 +2,253 @@
 include '../lib/koneksi.php';
 date_default_timezone_set('Asia/Jakarta');
 
-$sql = "SELECT DATE(p.TanggalPenjualan) as TanggalPenjualan, 
-               COUNT(p.PenjualanID) AS JumlahTransaksi, 
-               SUM(p.TotalHarga) AS TotalPenjualan
-        FROM penjualan p
-        GROUP BY DATE(p.TanggalPenjualan)
-        ORDER BY DATE(p.TanggalPenjualan) ASC";
+/* =============================
+   FILTER TANGGAL
+============================= */
+$tgl_awal  = '';
+$tgl_akhir = '';
+
+$where = '';
+$params = array();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $tgl_awal  = $_POST['tgl_awal'];
+    $tgl_akhir = $_POST['tgl_akhir'];
+
+    if ($tgl_awal != '' && $tgl_akhir != '') {
+        $where = " WHERE DATE(TanggalPenjualan) BETWEEN :awal AND :akhir ";
+        $params[':awal']  = $tgl_awal;
+        $params[':akhir'] = $tgl_akhir;
+    }
+}
+
+/* =============================
+   SUMMARY
+============================= */
+$sqlSummary = "
+SELECT 
+    COUNT(PenjualanID) AS total_transaksi,
+    SUM(TotalHarga) AS total_penjualan,
+    AVG(TotalHarga) AS rata_transaksi
+FROM penjualan
+" . $where;
+
+$stmt = $conn->prepare($sqlSummary);
+$stmt->execute($params);
+$summary = $stmt->fetch(PDO::FETCH_ASSOC);
+
+/* =============================
+   LAPORAN HARIAN
+============================= */
+$sql = "
+SELECT 
+    DATE(TanggalPenjualan) AS tanggal,
+    COUNT(PenjualanID) AS jumlah_transaksi,
+    SUM(TotalHarga) AS total_penjualan
+FROM penjualan
+" . $where . "
+GROUP BY DATE(TanggalPenjualan)
+ORDER BY DATE(TanggalPenjualan) ASC";
 
 $stmt = $conn->prepare($sql);
-$stmt->execute();
+$stmt->execute($params);
 $laporan = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+/* =============================
+   PRODUK TERLARIS
+============================= */
+$sqlProduk = "
+SELECT 
+    pr.NamaProduk,
+    SUM(dp.JumlahProduk) AS total_qty
+FROM detailpenjualan dp
+JOIN produk pr ON dp.ProdukID = pr.ProdukID
+JOIN penjualan pj ON dp.PenjualanID = pj.PenjualanID
+" . ($where ? str_replace('TanggalPenjualan','pj.TanggalPenjualan',$where) : '') . "
+GROUP BY pr.ProdukID
+ORDER BY total_qty DESC
+LIMIT 5";
+
+$stmt = $conn->prepare($sqlProduk);
+$stmt->execute($params);
+$produkTerlaris = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Laporan Penjualan</title>
-    <style>
-        body {
-            background-color: #f4f4f9;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            color: #333;
-        }
+<meta charset="UTF-8">
+<title>Laporan Penjualan</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-        .container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 900px;
-        }
+<style>
+body{
+    font-family:Poppins,sans-serif;
+    background:#f4f7fb;
+    padding:30px;
+    font-size:13px;
+}
 
-        h2 {
-            text-align: center;
-            color: #444;
-        }
+.wrapper{
+    max-width:1100px;
+    margin:auto;
+}
 
-        form {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            margin-top: 20px;
-        }
+.card{
+    background:#fff;
+    border-radius:16px;
+    padding:22px;
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+    margin-bottom:24px;
+}
 
-        input, button {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
+h2{
+    margin:0 0 16px;
+    color:#0f172a;
+    border-left:4px solid #00AEEF;
+    padding-left:12px;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: white;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-        }
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 14px;
-            text-align: left;
-            font-size: 14px;
-        }
+.box{
+    background:#f0faff;
+    border-radius:12px;
+    padding:16px;
+}
 
-        th {
-            background-color: #20263f;
-            color: white;
-            font-weight: 700;
-        }
+.box h4{
+    margin:0;
+    font-size:12px;
+    color:#475569;
+}
 
-        td {
-            background-color: #f9f9f9;
-        }
+.box p{
+    margin:6px 0 0;
+    font-size:18px;
+    font-weight:600;
+    color:#0f172a;
+}
 
-        tr:nth-child(even) td {
-            background-color: #eef;
-        }
+form{
+    display:flex;
+    gap:10px;
+    margin-bottom:16px;
+}
 
-        .btn-custom {
-            text-decoration: none;
-            padding: 10px 14px;
-            border-radius: 6px;
-            display: inline-block;
-            margin: 4px;
-            background-color: #20263f;
-            color: white;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
+input,button{
+    padding:8px 12px;
+    border-radius:8px;
+    border:1px solid #dbe2ea;
+}
 
-        .btn-custom:hover {
-            background-color: #37406b;
-        }
-    </style>
+button{
+    background:#00AEEF;
+    color:#fff;
+    border:none;
+    font-weight:600;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#00AEEF;
+    color:#fff;
+    padding:10px;
+    text-align:left;
+}
+
+td{
+    padding:9px 10px;
+    border-bottom:1px solid #edf2f7;
+}
+
+.note{
+    font-size:12px;
+    color:#64748b;
+    margin-top:12px;
+}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <h2>Laporan Penjualan</h2>
-        <a href="export_excel.php" class="btn-custom">Export ke Excel</a>
+<div class="wrapper">
 
+<div class="card">
+<h2>Ringkasan Penjualan</h2>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Jumlah Transaksi</th>
-                    <th>Total Penjualan</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($laporan)) {
-                    foreach ($laporan as $data) { ?>
-                        <tr>
-                            <td><?php echo $data['TanggalPenjualan']; ?></td>
-                            <td><?php echo $data['JumlahTransaksi']; ?></td>
-                            <td>Rp<?php echo number_format($data['TotalPenjualan'], 0, ',', '.'); ?></td>
-                            
-                        </tr>
-                    <?php }
-                } else { ?>
-                    <tr>
-                        <td colspan="3" style="text-align:center;">Tidak ada data penjualan.</td>
-                    </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-    </div>
+<div class="summary">
+<div class="box">
+<h4>Total Transaksi</h4>
+<p><?php echo number_format($summary['total_transaksi']); ?></p>
+</div>
+<div class="box">
+<h4>Total Penjualan</h4>
+<p>Rp<?php echo number_format($summary['total_penjualan'],0,',','.'); ?></p>
+</div>
+<div class="box">
+<h4>Rata-rata Transaksi</h4>
+<p>Rp<?php echo number_format($summary['rata_transaksi'],0,',','.'); ?></p>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Filter Tanggal</h2>
+<form method="POST">
+<input type="date" name="tgl_awal" value="<?php echo $tgl_awal; ?>">
+<input type="date" name="tgl_akhir" value="<?php echo $tgl_akhir; ?>">
+<button>Filter</button>
+</form>
+</div>
+
+<div class="card">
+<h2>Laporan Harian</h2>
+<table>
+<tr>
+<th>Tanggal</th>
+<th>Jumlah Transaksi</th>
+<th>Total Penjualan</th>
+</tr>
+<?php foreach($laporan as $r){ ?>
+<tr>
+<td><?php echo $r['tanggal']; ?></td>
+<td><?php echo $r['jumlah_transaksi']; ?></td>
+<td>Rp<?php echo number_format($r['total_penjualan'],0,',','.'); ?></td>
+</tr>
+<?php } ?>
+</table>
+</div>
+
+<div class="card">
+<h2>Produk Terlaris</h2>
+<table>
+<tr>
+<th>Produk</th>
+<th>Total Terjual</th>
+</tr>
+<?php foreach($produkTerlaris as $p){ ?>
+<tr>
+<td><?php echo $p['NamaProduk']; ?></td>
+<td><?php echo $p['total_qty']; ?></td>
+</tr>
+<?php } ?>
+</table>
+
+<div class="note">
+Catatan: Laporan ini digunakan untuk evaluasi penjualan, pemantauan performa produk, 
+serta pengambilan keputusan stok dan strategi penjualan.
+</div>
+</div>
+
+</div>
 </body>
 </html>
-
-
-
