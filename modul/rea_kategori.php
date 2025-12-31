@@ -1,47 +1,32 @@
 <?php
 include '../lib/koneksi.php';
 
-try {
-    $sql = "SELECT * FROM kategori ORDER BY id_kategori DESC";
-    $stmt = $conn->query($sql);
-    $kategori = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    echo "<p>Terjadi kesalahan</p>";
-}
+$sql = "SELECT * FROM kategori ORDER BY id_kategori DESC";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$kategori = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <title>Data Kategori</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* ===== GLOBAL (SAMA INPUT PRODUK) ===== */
 body{
     font-family:'Poppins',sans-serif;
     background:#f4f7fb;
     padding:30px;
     font-size:13px;
-    color:#333;
 }
-
-.wrapper{
-    max-width:700px;
-    margin:auto;
-}
-
-/* ===== CARD ===== */
+.wrapper{max-width:700px;margin:auto}
 .card{
     background:#fff;
     border-radius:16px;
     padding:22px;
     box-shadow:0 10px 25px rgba(0,0,0,.06);
 }
-
 .card h3{
     font-size:18px;
     font-weight:600;
@@ -50,76 +35,108 @@ body{
     border-left:4px solid #00AEEF;
     padding-left:12px;
 }
-
-/* ===== TABLE ===== */
-.table-wrap{
-    overflow-x:auto;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:13px;
-}
-
+table{width:100%;border-collapse:collapse}
 th{
     background:#00AEEF;
     color:#fff;
     padding:10px;
-    text-align:left;
-    font-weight:600;
 }
-
 td{
-    padding:9px 10px;
-    border-bottom:1px solid #edf2f7;
+    padding:10px;
+    border-bottom:1px solid #e5e7eb;
 }
+tr:hover td{background:#f0faff}
+.btn{
+    padding:5px 12px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:600;
+    color:#fff;
+    text-decoration:none;
+    cursor:pointer;
+}
+.btn-edit{background:#22c55e}
+.btn-del{background:#ef4444}
+.aksi{display:flex;gap:6px}
 
-tr:hover td{
-    background:#f0faff;
+/* MODAL */
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.4);
+    display:none;
+    align-items:center;
+    justify-content:center;
 }
-
-/* ===== EMPTY ===== */
-.empty{
-    text-align:center;
-    padding:14px;
-    color:#64748b;
+.modal.show{display:flex}
+.modal-box{
+    background:#fff;
+    padding:20px;
+    border-radius:14px;
+    width:320px;
 }
+.modal-box h4{margin-bottom:10px}
+.modal-action{display:flex;justify-content:flex-end;gap:8px}
 </style>
 </head>
 
 <body>
 <div class="wrapper">
-
 <div class="card">
 <h3>Data Kategori</h3>
 
-<div class="table-wrap">
 <table>
-<thead>
 <tr>
-    <th style="width:60px">No</th>
+    <th width="60">No</th>
     <th>Nama Kategori</th>
+    <th width="120">Aksi</th>
 </tr>
-</thead>
-<tbody>
-<?php if(!empty($kategori)): ?>
-    <?php $no=1; foreach($kategori as $row): ?>
-    <tr>
-        <td><?= $no++ ?></td>
-        <td><?= htmlspecialchars($row['nama_kategori']) ?></td>
-    </tr>
-    <?php endforeach; ?>
-<?php else: ?>
-    <tr>
-        <td colspan="2" class="empty">Belum ada data kategori</td>
-    </tr>
-<?php endif; ?>
-</tbody>
+<?php $no=1; foreach($kategori as $k): ?>
+<tr>
+    <td><?= $no++ ?></td>
+    <td><?= htmlspecialchars($k['nama_kategori']) ?></td>
+    <td class="aksi">
+        <a href="upd_kategori.php?id=<?= $k['id_kategori'] ?>" class="btn btn-edit">Edit</a>
+        <button class="btn btn-del btn-hapus-kategori"
+            data-id="<?= $k['id_kategori'] ?>"
+            data-nama="<?= htmlspecialchars($k['nama_kategori']) ?>">
+            Hapus
+        </button>
+    </td>
+</tr>
+<?php endforeach ?>
 </table>
 </div>
+</div>
 
+<!-- MODAL -->
+<div class="modal" id="modalHapus">
+<div class="modal-box">
+<h4>Hapus Kategori</h4>
+<p id="modalText"></p>
+<div class="modal-action">
+    <button onclick="tutup()">Batal</button>
+    <a id="btnHapus" class="btn btn-del">Hapus</a>
 </div>
 </div>
+</div>
+
+<script>
+const modal = document.getElementById('modalHapus');
+const text  = document.getElementById('modalText');
+const btn   = document.getElementById('btnHapus');
+
+document.querySelectorAll('.btn-hapus-kategori').forEach(b=>{
+    b.onclick = () => {
+        text.innerHTML = `Yakin hapus <b>${b.dataset.nama}</b>?`;
+        btn.href = `del_kategori.php?id=${b.dataset.id}`;
+        modal.classList.add('show');
+    }
+});
+
+function tutup(){
+    modal.classList.remove('show');
+}
+</script>
 </body>
 </html>

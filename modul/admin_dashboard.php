@@ -279,7 +279,7 @@ body{
 
         <li>
             <a href="?page=petugas">
-                <span class="material-symbols-outlined">admin_panel_settings</span>Data Petugas
+                <span class="material-symbols-outlined">admin_panel_settings</span>Manajemen Admin
             </a>
         </li>
 

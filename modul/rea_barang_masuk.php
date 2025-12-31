@@ -1,117 +1,168 @@
 <?php
-include '../lib/koneksi.php';
 session_start();
+include '../lib/koneksi.php';
 
-// Cek login
-if (!isset($_SESSION['email'])) {
-    die("❌ Anda harus login terlebih dahulu.");
+if (!isset($_SESSION['nama'])) {
+    die("Akses ditolak");
 }
 
-// Ambil data barang masuk dan relasinya
-$query = "
-    SELECT 
-        bm.tanggal_masuk,
-        bm.keterangan,
-        u.nama AS nama_user,
-        p.NamaProduk,
-        dbm.jumlah
-    FROM barang_masuk bm
-    JOIN user u ON bm.UserID = u.UserID
-    JOIN detai_barang_masuk dbm ON bm.id_masuk = dbm.id_masuk
-    JOIN produk p ON dbm.ProdukID = p.ProdukID
-    ORDER BY bm.tanggal_masuk DESC
+/* ===== AMBIL DATA BARANG MASUK ===== */
+$sql = "
+SELECT 
+    bm.id_masuk,
+    bm.tanggal_masuk,
+    bm.keterangan,
+    u.nama AS nama_user,
+    p.NamaProduk,
+    dbm.jumlah
+FROM barang_masuk bm
+JOIN user u ON bm.UserID = u.UserID
+JOIN detai_barang_masuk dbm ON bm.id_masuk = dbm.id_masuk
+JOIN produk p ON dbm.ProdukID = p.ProdukID
+ORDER BY bm.tanggal_masuk DESC
 ";
 
-$stmt = $conn->prepare($query);
+$stmt = $conn->prepare($sql);
 $stmt->execute();
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Data Barang Masuk</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f2f5;
-            padding: 20px;
-        }
+<meta charset="UTF-8">
+<title>Data Barang Masuk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        h2 {
-            text-align: center;
-            color: #20263f;
-            margin-bottom: 20px;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-        .table-container {
-            max-width: 900px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+<style>
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f4f7fb;
+    padding:30px;
+    font-size:13px;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
+.wrapper{
+    max-width:1100px;
+    margin:auto;
+}
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-            font-size: 14px;
-        }
+.card{
+    background:#fff;
+    border-radius:16px;
+    padding:22px;
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
 
-        th {
-            background-color: #20263f;
-            color: white;
-        }
+.card h3{
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:18px;
+    color:#0f172a;
+    border-left:4px solid #00AEEF;
+    padding-left:12px;
+}
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+table{
+    width:100%;
+    border-collapse:collapse;
+}
 
-        tr:hover {
-            background-color: #eef1f7;
-        }
-    </style>
+th{
+    background:#00AEEF;
+    color:#fff;
+    padding:10px;
+    text-align:left;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #edf2f7;
+}
+
+tr:hover td{
+    background:#f0faff;
+}
+
+.aksi{
+    display:flex;
+    gap:6px;
+}
+
+.btn{
+    padding:6px 12px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:600;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    color:#fff;
+}
+
+.btn.edit{
+    background:#00AEEF;
+}
+.btn.edit:hover{ background:#0095cc; }
+
+.btn.hapus{
+    background:#ef4444;
+}
+.btn.hapus:hover{ background:#dc2626; }
+</style>
 </head>
+
 <body>
-    <div class="table-container">
-        <h2>Data Barang Masuk</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Tanggal Masuk</th>
-                    <th>User</th>
-                    <th>Produk</th>
-                    <th>Jumlah</th>
-                    <th>Keterangan</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (count($data) > 0): ?>
-                    <?php foreach ($data as $row): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($row['tanggal_masuk']) ?></td>
-                            <td><?= htmlspecialchars($row['nama_user']) ?></td>
-                            <td><?= htmlspecialchars($row['NamaProduk']) ?></td>
-                            <td><?= htmlspecialchars($row['jumlah']) ?></td>
-                            <td><?= htmlspecialchars($row['keterangan']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="5">Tidak ada data barang masuk.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
+<div class="wrapper">
+<div class="card">
+
+<h3>Data Barang Masuk</h3>
+
+<table>
+<thead>
+<tr>
+    <th>No</th>
+    <th>Tanggal</th>
+    <th>User</th>
+    <th>Produk</th>
+    <th>Jumlah</th>
+    <th>Keterangan</th>
+    <th>Aksi</th>
+</tr>
+</thead>
+<tbody>
+
+<?php if(count($data) > 0): ?>
+<?php $no=1; foreach($data as $row): ?>
+<tr>
+    <td><?= $no++ ?></td>
+    <td><?= date('d-m-Y', strtotime($row['tanggal_masuk'])) ?></td>
+    <td><?= htmlspecialchars($row['nama_user']) ?></td>
+    <td><?= htmlspecialchars($row['NamaProduk']) ?></td>
+    <td><?= htmlspecialchars($row['jumlah']) ?></td>
+    <td><?= htmlspecialchars($row['keterangan']) ?></td>
+    <td class="aksi">
+        <a href="upd_barang_masuk.php?id=<?= $row['id_masuk'] ?>" class="btn edit">Edit</a>
+        <a href="del_barang_masuk.php?id=<?= $row['id_masuk'] ?>"
+           class="btn hapus"
+           onclick="return confirm('Yakin hapus data barang masuk ini?')">
+           Hapus
+        </a>
+    </td>
+</tr>
+<?php endforeach; ?>
+<?php else: ?>
+<tr>
+    <td colspan="7">Data barang masuk belum ada.</td>
+</tr>
+<?php endif; ?>
+
+</tbody>
+</table>
+
+</div>
+</div>
 </body>
 </html>

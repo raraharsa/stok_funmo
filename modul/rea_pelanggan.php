@@ -245,11 +245,13 @@ tr:hover td{
     <td><?= htmlspecialchars($row['NPWP']); ?></td>
     <td class="aksi">
         <a href="upd_pelanggan.php?id=<?= $row['PelangganID']; ?>" class="btn edit">Edit</a>
-        <button class="btn hapus"
-                data-id="<?= $row['PelangganID']; ?>"
-                data-nama="<?= htmlspecialchars($row['NamaPelanggan']); ?>">
-            Hapus
-        </button>
+       <button class="btn hapus btn-hapus-data"
+        data-id="<?= $row['PelangganID']; ?>"
+        data-nama="<?= htmlspecialchars($row['NamaPelanggan']); ?>">
+    Hapus
+</button>
+
+
     </td>
 </tr>
 <?php endforeach; ?>
@@ -278,16 +280,28 @@ const modalText = document.getElementById('modalText');
 const confirmBtn = document.getElementById('confirmHapus');
 const batalBtn = document.querySelector('.btn.batal');
 
-document.querySelectorAll('.btn.hapus').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-        modalText.innerHTML = `Yakin ingin menghapus <b>${btn.dataset.nama}</b>?`;
-        confirmBtn.href = `del_pelanggan.php?id=${btn.dataset.id}`;
+document.querySelectorAll('.btn-hapus-data').forEach(btn=>{
+    btn.addEventListener('click', () => {
+        modalText.innerHTML =
+          `Yakin ingin menghapus <b>${btn.dataset.nama}</b>?`;
+
+        confirmBtn.href =
+          `del_pelanggan.php?id=${btn.dataset.id}`;
+
         modal.classList.add('show');
     });
 });
 
+
 batalBtn.onclick = ()=> modal.classList.remove('show');
 modal.onclick = e => { if(e.target===modal) modal.classList.remove('show'); };
+document.addEventListener("DOMContentLoaded", function () {
+    const msg = sessionStorage.getItem('msg');
+    if (msg) {
+        alert(msg);
+        sessionStorage.removeItem('msg');
+    }
+});
 </script>
 
 </body>

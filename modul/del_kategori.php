@@ -5,41 +5,41 @@ $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($id === 0) {
     echo "<script>
-        alert('ID produk tidak valid');
+        alert('ID kategori tidak valid');
         history.back();
     </script>";
     exit;
 }
 
-/* CEK APAKAH PRODUK PERNAH DIPAKAI DI DETAIL PENJUALAN */
+/* CEK APAKAH KATEGORI DIPAKAI PRODUK */
 $cek = $conn->prepare(
-    "SELECT COUNT(*) FROM detailpenjualan WHERE ProdukID = ?"
+    "SELECT COUNT(*) FROM produk WHERE id_kategori = ?"
 );
 $cek->execute([$id]);
 $jumlah = $cek->fetchColumn();
 
 if ($jumlah > 0) {
     echo "<script>
-        alert('Produk tidak bisa dihapus karena sudah pernah dijual!');
-        location='admin_dashboard.php?page=data_produk';
+        alert('Kategori tidak bisa dihapus karena masih digunakan oleh produk!');
+        location='admin_dashboard.php?page=data_kategori';
     </script>";
     exit;
 }
 
-/* HAPUS PRODUK */
+/* HAPUS KATEGORI */
 $hapus = $conn->prepare(
-    "DELETE FROM produk WHERE ProdukID = ?"
+    "DELETE FROM kategori WHERE id_kategori = ?"
 );
 $hapus->execute([$id]);
 
 if ($hapus->rowCount() > 0) {
     echo "<script>
-        alert('Produk berhasil dihapus');
-        location='admin_dashboard.php?page=data_produk';
+        alert('Kategori berhasil dihapus');
+        location='admin_dashboard.php?page=data_kategori';
     </script>";
 } else {
     echo "<script>
-        alert('Gagal: data produk tidak ditemukan');
+        alert('Gagal: data kategori tidak ditemukan');
         history.back();
     </script>";
 }

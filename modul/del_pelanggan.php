@@ -1,33 +1,21 @@
-<?php 
+<?php
 include '../lib/koneksi.php';
 
-if (isset($_GET['id'])) {
-    $id = (int) $_GET['id'];
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-    // Hapus detail transaksi 
-    $sql = "DELETE FROM detailpenjualan WHERE PenjualanID IN (SELECT PenjualanID FROM penjualan WHERE PelangganID = :PelangganID)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':PelangganID', $id, PDO::PARAM_INT);
-    $stmt->execute();
+$stmt = $conn->prepare(
+    "DELETE FROM pelanggan WHERE PelangganID = ?"
+);
+$stmt->execute([$id]);
 
-    // Hapus transaksi terkait pelanggan
-    $sql = "DELETE FROM penjualan WHERE PelangganID = :PelangganID";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':PelangganID', $id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    // Hapus pelanggan
-    $sql = "DELETE FROM pelanggan WHERE PelangganID = :PelangganID";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':PelangganID', $id, PDO::PARAM_INT);
-
-    if ($stmt->execute()) {
-        echo "<script>alert('Data Pelanggan berhasil di hapus !'); window.location.href='admin_dashboard.php?page=data_pelanggan';</script>";
-    } else {
-        echo "Error: " . $stmt->errorInfo()[2];
-    }
+if ($stmt->rowCount() > 0) {
+    echo "<script>
+        alert('Data berhasil dihapus');
+        location='admin_dashboard.php?page=data_pelanggan';
+    </script>";
+} else {
+    echo "<script>
+        alert('GAGAL: data tidak ditemukan di database');
+        history.back();
+    </script>";
 }
-
-
-
-?>
